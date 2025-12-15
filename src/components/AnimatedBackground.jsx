@@ -486,27 +486,7 @@ function AnimatedBackground() {
           </div>
 
           {/* Services Section */}
-          <div className="mt-12 md:mt-16 lg:mt-20 px-2">
-            <h3 className="text-2xl sm:text-3xl font-bold text-white text-center mb-8 md:mb-10">Our Services</h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-              {[
-                { name: 'Data Entry', icon: '📊' },
-                { name: 'Web Dev', icon: '💻' },
-                { name: 'SEO', icon: '🔍' },
-                { name: 'UI/UX', icon: '🎨' },
-                { name: 'App Dev', icon: '📱' },
-                { name: 'Marketing', icon: '📈' }
-              ].map((service) => (
-                <div
-                  key={service.name}
-                  className="bg-white/5 backdrop-blur-sm rounded-lg p-4 text-center border border-white/10 hover:border-purple-500/30 transition-all hover:bg-white/10 group"
-                >
-                  <div className="text-2xl mb-2">{service.icon}</div>
-                  <div className="text-white font-medium text-sm">{service.name}</div>
-                </div>
-              ))}
-            </div>
-          </div>
+         
 
         </div>
       </section>

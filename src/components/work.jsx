@@ -338,7 +338,7 @@ const Work = () => {
     {
       id: "w3",
       images: [
-        "/src/assets/n1_v2.jpeg",
+        "/src/assets/",
         // "/src/assets/n2.jpeg",
         // "/src/assets/n3.jpeg",
         // "/src/assets/n4.jpeg"

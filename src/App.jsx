@@ -52,7 +52,7 @@ function App() {
           {/* Contact Page */}
           <Route path="/contact" element={
             <>
-              <NavBar />
+              
               <Contact />
             </>
           } />
