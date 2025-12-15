@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AnimatedBackground from "./components/AnimatedBackground"; // Now includes testimonials
 import NavBar from "./components/NavBar";
-import Form from "./components/form";
+import Form from "./components/Form";
 import Services from "./components/Services";
 import Work from "./components/work";
 import About from "./components/About";
