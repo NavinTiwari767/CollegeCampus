@@ -1,10 +1,13 @@
+
 import React, { useEffect, useRef } from "react";
 import { Star, Quote, ChevronLeft, ChevronRight, ThumbsUp } from "lucide-react";
+import { useNavigate } from "react-router-dom"; // Added import
 
 function AnimatedBackground() {
   const canvasRef = useRef(null);
   const scrollContainerRef = useRef(null);
   const autoScrollInterval = useRef(null);
+  const navigate = useNavigate(); // Added navigate hook
   
   // Testimonials Data
   const testimonials = [
@@ -81,6 +84,15 @@ function AnimatedBackground() {
       imageColor: "bg-gradient-to-r from-purple-500 to-indigo-500",
     }
   ];
+
+  // ===== BUTTON HANDLERS =====
+  const handleGetStartedClick = () => {
+    navigate('/form');
+  };
+
+  const handleViewWorkClick = () => {
+    navigate('/work');
+  };
 
   // ===== CANVAS ANIMATION =====
   useEffect(() => {
@@ -305,12 +317,20 @@ function AnimatedBackground() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-2">
-            <button className="group relative px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full text-base sm:text-lg font-semibold overflow-hidden transition-all hover:shadow-[0_0_30px_rgba(168,85,247,0.4)] hover:scale-105 w-full sm:w-auto">
+            {/* Get Started Button - Now Navigates to /form */}
+            <button 
+              onClick={handleGetStartedClick}
+              className="group relative px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full text-base sm:text-lg font-semibold overflow-hidden transition-all hover:shadow-[0_0_30px_rgba(168,85,247,0.4)] hover:scale-105 w-full sm:w-auto"
+            >
               <span className="relative z-10">Get Started</span>
               <div className="absolute inset-0 bg-gradient-to-r from-pink-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity" />
             </button>
             
-            <button className="px-6 sm:px-8 py-3 sm:py-4 border border-purple-500/30 text-purple-300 rounded-full text-base sm:text-lg font-semibold hover:bg-purple-500/10 hover:border-purple-500/50 transition-all w-full sm:w-auto">
+            {/* View Work Button - Now Navigates to /work */}
+            <button 
+              onClick={handleViewWorkClick}
+              className="px-6 sm:px-8 py-3 sm:py-4 border border-purple-500/30 text-purple-300 rounded-full text-base sm:text-lg font-semibold hover:bg-purple-500/10 hover:border-purple-500/50 transition-all w-full sm:w-auto"
+            >
               View Work
             </button>
           </div>

@@ -110,11 +110,11 @@ const NavBar = () => {
             <button
               onClick={() => {
                 setIsMenuOpen(false);
-                navigate("/portfolio");
+                navigate("/work");
               }}
               className="text-white hover:text-purple-400 transition-colors py-2"
             >
-              Portfolio
+              Our Work
             </button>
             <button
               onClick={() => {
