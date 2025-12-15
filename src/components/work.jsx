@@ -338,10 +338,10 @@ const Work = () => {
     {
       id: "w3",
       images: [
-        "/src/assets/n1.jpeg",
-        "/src/assets/n2.jpeg",
-        "/src/assets/n3.jpeg",
-        "/src/assets/n4.jpeg"
+        "/src/assets/n1_v2.jpeg",
+        // "/src/assets/n2.jpeg",
+        // "/src/assets/n3.jpeg",
+        // "/src/assets/n4.jpeg"
       ],
       title: "Nautical Crew Maritime",
       category: "Web Development",
