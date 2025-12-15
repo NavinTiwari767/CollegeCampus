@@ -24,16 +24,16 @@ const Footer = () => {
               Building exceptional digital experiences that drive growth and innovation for businesses worldwide.
             </p>
             <div className="flex gap-3">
-              <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20 flex items-center justify-center text-purple-400 hover:text-purple-300 transition-all">
+              <a href="https://www.youtube.com/@CollegeCampus1" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20 flex items-center justify-center text-purple-400 hover:text-purple-300 transition-all">
                 <Youtube size={18} />
               </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20 flex items-center justify-center text-purple-400 hover:text-purple-300 transition-all">
+              <a href="www.linkedin.com/in/college-campus-1514143a0" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20 flex items-center justify-center text-purple-400 hover:text-purple-300 transition-all">
                 <Linkedin size={18} />
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20 flex items-center justify-center text-purple-400 hover:text-purple-300 transition-all">
+              <a href="https://www.instagram.com/collegecampus10?igsh=MXZndnZhbHRncnd0Zw==" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20 flex items-center justify-center text-purple-400 hover:text-purple-300 transition-all">
                 <Instagram size={18} />
               </a>
-              <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20 flex items-center justify-center text-purple-400 hover:text-purple-300 transition-all">
+              <a href="https://github.com/NavinTiwari767" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20 flex items-center justify-center text-purple-400 hover:text-purple-300 transition-all">
                 <Github size={18} />
               </a>
             </div>

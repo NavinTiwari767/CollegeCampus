@@ -1,18 +1,17 @@
 import React, { useEffect, useRef } from "react";
-import { Star, Quote, Globe, ThumbsUp, ChevronLeft, ChevronRight } from "lucide-react";
+import { Star, Quote, ChevronLeft, ChevronRight, ThumbsUp } from "lucide-react";
 
 function AnimatedBackground() {
   const canvasRef = useRef(null);
   const scrollContainerRef = useRef(null);
   const autoScrollInterval = useRef(null);
   
-  // Testimonials Data - ALL IN ENGLISH
+  // Testimonials Data
   const testimonials = [
     {
       id: 1,
       name: "Adam Crook",
       country: "USA",
-      language: "English",
       rating: 5,
       service: "Data Entry",
       content: "College Campus made my first experience with offshore data entry a successful process which I plan to repeat many times in the future.",
@@ -22,7 +21,6 @@ function AnimatedBackground() {
       id: 2,
       name: "Rajesh Kumar",
       country: "India",
-      language: "English",
       rating: 5,
       service: "Web Development",
       content: "The team at College Campus developed our website brilliantly. Their professionalism and timely delivery are commendable.",
@@ -32,7 +30,6 @@ function AnimatedBackground() {
       id: 3,
       name: "Zhang Wei",
       country: "China",
-      language: "English",
       rating: 4,
       service: "UI/UX Design",
       content: "College Campus's UI/UX design services are very professional. The interface they designed is beautiful and user-friendly.",
@@ -42,7 +39,6 @@ function AnimatedBackground() {
       id: 4,
       name: "Priya Sharma",
       country: "India",
-      language: "English",
       rating: 5,
       service: "SEO",
       content: "Thanks to College Campus's SEO services, our website traffic increased by 300% in just 3 months. Highly impressive.",
@@ -52,7 +48,6 @@ function AnimatedBackground() {
       id: 5,
       name: "Michael Schmidt",
       country: "Germany",
-      language: "English",
       rating: 5,
       service: "App Development",
       content: "College Campus developed our mobile app perfectly according to our requirements. Exceeded our expectations.",
@@ -62,7 +57,6 @@ function AnimatedBackground() {
       id: 6,
       name: "Aarav Patel",
       country: "India",
-      language: "English",
       rating: 4,
       service: "Data Entry",
       content: "College Campus's data entry services are very accurate and fast. Their team's performance is praiseworthy.",
@@ -72,7 +66,6 @@ function AnimatedBackground() {
       id: 7,
       name: "Chen Li",
       country: "Singapore",
-      language: "English",
       rating: 5,
       service: "Web Development",
       content: "College Campus delivered an exceptional e-commerce website for our business. Their technical expertise is remarkable.",
@@ -82,7 +75,6 @@ function AnimatedBackground() {
       id: 8,
       name: "David Miller",
       country: "UK",
-      language: "English",
       rating: 5,
       service: "UI/UX Design",
       content: "The design team at College Campus transformed our complex dashboard into an intuitive and beautiful interface.",
@@ -105,7 +97,6 @@ function AnimatedBackground() {
     };
     setCanvasSize();
 
-    // Grid-based network animation
     class Node {
       constructor(x, y) {
         this.x = x;
@@ -120,7 +111,6 @@ function AnimatedBackground() {
         this.x += this.vx;
         this.y += this.vy;
 
-        // Drift back to base position
         const dx = this.baseX - this.x;
         const dy = this.baseY - this.y;
         this.x += dx * 0.01;
@@ -128,7 +118,6 @@ function AnimatedBackground() {
       }
     }
 
-    // Create grid of nodes
     const nodes = [];
     const spacing = 80;
     for (let x = -spacing; x < canvas.width + spacing; x += spacing) {
@@ -140,7 +129,6 @@ function AnimatedBackground() {
     const animate = () => {
       time += 0.01;
       
-      // Dark gradient background
       const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
       gradient.addColorStop(0, "#0a0a1a");
       gradient.addColorStop(0.5, "#0f0f2e");
@@ -148,10 +136,8 @@ function AnimatedBackground() {
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Update nodes
       nodes.forEach(node => node.update());
 
-      // Draw connections
       ctx.strokeStyle = "rgba(99, 102, 241, 0.15)";
       ctx.lineWidth = 1;
       
@@ -172,7 +158,6 @@ function AnimatedBackground() {
         }
       }
 
-      // Draw nodes with glow
       nodes.forEach(node => {
         const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, 6);
         gradient.addColorStop(0, "rgba(147, 51, 234, 0.8)");
@@ -184,14 +169,12 @@ function AnimatedBackground() {
         ctx.arc(node.x, node.y, 6, 0, Math.PI * 2);
         ctx.fill();
 
-        // Core dot
         ctx.fillStyle = "rgba(236, 72, 153, 0.9)";
         ctx.beginPath();
         ctx.arc(node.x, node.y, 1.5, 0, Math.PI * 2);
         ctx.fill();
       });
 
-      // Subtle floating orbs
       for (let i = 0; i < 5; i++) {
         const x = canvas.width * 0.5 + Math.cos(time * 0.5 + i * 2) * 200;
         const y = canvas.height * 0.5 + Math.sin(time * 0.3 + i * 2) * 150;
@@ -222,52 +205,47 @@ function AnimatedBackground() {
     };
   }, []);
 
-  // ===== TESTIMONIALS AUTO-SCROLL =====
+  // ===== FAST AUTO-SCROLL MARQUEE =====
   useEffect(() => {
-    const startAutoScroll = () => {
-      autoScrollInterval.current = setInterval(() => {
-        if (scrollContainerRef.current) {
-          scrollContainerRef.current.scrollLeft += 1;
-          
-          // Reset to start if at the end
-          if (scrollContainerRef.current.scrollLeft >= 
-              scrollContainerRef.current.scrollWidth - scrollContainerRef.current.clientWidth) {
-            scrollContainerRef.current.scrollLeft = 0;
-          }
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    let scrollPos = 0;
+    let isAutoScrolling = true;
+
+    const autoScroll = () => {
+      if (isAutoScrolling) {
+        scrollPos += 1; // Fast scroll speed - increase value for faster scrolling
+        container.scrollLeft = scrollPos;
+
+        // Reset to seamless loop
+        if (scrollPos >= container.scrollWidth - container.clientWidth) {
+          scrollPos = 0;
+          container.scrollLeft = 0;
         }
-      }, 30);
+      }
+      animationFrameId = requestAnimationFrame(autoScroll);
     };
 
-    startAutoScroll();
+    let animationFrameId = requestAnimationFrame(autoScroll);
+
+    const handleMouseEnter = () => {
+      isAutoScrolling = false;
+    };
+
+    const handleMouseLeave = () => {
+      isAutoScrolling = true;
+    };
+
+    container.addEventListener("mouseenter", handleMouseEnter);
+    container.addEventListener("mouseleave", handleMouseLeave);
 
     return () => {
-      if (autoScrollInterval.current) {
-        clearInterval(autoScrollInterval.current);
-      }
+      cancelAnimationFrame(animationFrameId);
+      container.removeEventListener("mouseenter", handleMouseEnter);
+      container.removeEventListener("mouseleave", handleMouseLeave);
     };
   }, []);
-
-  const pauseScroll = () => {
-    if (autoScrollInterval.current) {
-      clearInterval(autoScrollInterval.current);
-    }
-  };
-
-  const resumeScroll = () => {
-    if (autoScrollInterval.current) {
-      clearInterval(autoScrollInterval.current);
-    }
-    autoScrollInterval.current = setInterval(() => {
-      if (scrollContainerRef.current) {
-        scrollContainerRef.current.scrollLeft += 1;
-        
-        if (scrollContainerRef.current.scrollLeft >= 
-            scrollContainerRef.current.scrollWidth - scrollContainerRef.current.clientWidth) {
-          scrollContainerRef.current.scrollLeft = 0;
-        }
-      }
-    }, 30);
-  };
 
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
@@ -283,7 +261,7 @@ function AnimatedBackground() {
 
   const renderStars = (rating) => {
     return (
-      <div className="flex">
+      <div className="flex gap-0.5">
         {[...Array(5)].map((_, i) => (
           <Star
             key={i}
@@ -312,11 +290,7 @@ function AnimatedBackground() {
       />
 
       {/* ===== HERO SECTION ===== */}
-      <section
-        id="home"
-        className="min-h-screen flex items-center justify-center px-4 md:px-8 relative"
-      >
-        {/* Gradient overlays */}
+      <section className="min-h-screen flex items-center justify-center px-4 md:px-8 relative">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0a0a1a]/50 pointer-events-none" />
         
         <div className="text-center max-w-4xl mx-auto relative z-10 px-4">
@@ -331,23 +305,17 @@ function AnimatedBackground() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-2">
-            <button
-              onClick={() => window.location.href = '/form'}
-              className="group relative px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full text-base sm:text-lg font-semibold overflow-hidden transition-all hover:shadow-[0_0_30px_rgba(168,85,247,0.4)] hover:scale-105 w-full sm:w-auto"
-            >
+            <button className="group relative px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full text-base sm:text-lg font-semibold overflow-hidden transition-all hover:shadow-[0_0_30px_rgba(168,85,247,0.4)] hover:scale-105 w-full sm:w-auto">
               <span className="relative z-10">Get Started</span>
               <div className="absolute inset-0 bg-gradient-to-r from-pink-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity" />
             </button>
             
-            <button 
-              onClick={() => window.location.href = '/work'}
-              className="px-6 sm:px-8 py-3 sm:py-4 border border-purple-500/30 text-purple-300 rounded-full text-base sm:text-lg font-semibold hover:bg-purple-500/10 hover:border-purple-500/50 transition-all w-full sm:w-auto"
-            >
+            <button className="px-6 sm:px-8 py-3 sm:py-4 border border-purple-500/30 text-purple-300 rounded-full text-base sm:text-lg font-semibold hover:bg-purple-500/10 hover:border-purple-500/50 transition-all w-full sm:w-auto">
               View Work
             </button>
           </div>
 
-          {/* Stats or features */}
+          {/* Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mt-12 sm:mt-16 md:mt-20 max-w-2xl mx-auto px-2">
             <div className="text-center p-4 sm:p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
               <div className="text-2xl sm:text-3xl font-bold text-transparent bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text mb-1 sm:mb-2">100+</div>
@@ -368,7 +336,7 @@ function AnimatedBackground() {
       {/* ===== TESTIMONIALS SECTION ===== */}
       <section className="relative py-12 md:py-16 px-3 sm:px-4 md:px-8 overflow-hidden">
         <div className="relative z-10 max-w-7xl mx-auto">
-          {/* Header with number */}
+          {/* Header */}
           <div className="text-center mb-12 md:mb-16 px-2">
             <div className="inline-block relative">
               <div className="absolute -top-6 md:-top-8 -left-6 md:-left-10 text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold text-purple-500/20">99</div>
@@ -397,18 +365,15 @@ function AnimatedBackground() {
             </button>
           </div>
 
-          {/* Testimonials Container - Auto Scroll */}
+          {/* Testimonials Container - FAST AUTO SCROLL */}
           <div 
             ref={scrollContainerRef}
             className="flex overflow-x-auto scrollbar-hide space-x-4 sm:space-x-6 md:space-x-8 py-4 sm:py-6 md:py-8 px-3 sm:px-4"
-            style={{ scrollBehavior: 'smooth' }}
-            onMouseEnter={pauseScroll}
-            onMouseLeave={resumeScroll}
           >
             {testimonials.map((testimonial) => (
               <div
                 key={testimonial.id}
-                className="flex-shrink-0 w-80 sm:w-84 md:w-96 bg-white/5 backdrop-blur-lg rounded-xl sm:rounded-2xl p-6 border border-white/10 hover:border-purple-500/30 transition-all hover:bg-white/10 flex flex-col h-[380px]"
+                className="flex-shrink-0 w-80 sm:w-84 md:w-96 bg-white/5 backdrop-blur-lg rounded-xl sm:rounded-2xl p-6 border border-white/10 hover:border-purple-500/30 transition-all hover:bg-white/10 flex flex-col h-[380px] hover:shadow-lg"
               >
                 {/* Client Info */}
                 <div className="flex items-start justify-between mb-4">
@@ -484,12 +449,9 @@ function AnimatedBackground() {
               <p className="text-gray-400 text-sm mt-1">Based on 50+ reviews</p>
             </div>
           </div>
-
-          {/* Services Section */}
-         
-
         </div>
       </section>
+
       <style jsx>{`
         .scrollbar-hide {
           -ms-overflow-style: none;
