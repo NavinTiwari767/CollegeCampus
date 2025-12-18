@@ -1,5 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
+import p1 from '../assets/p1.jpeg';
+import p2 from '../assets/p2.jpeg';
+import p3 from '../assets/p3.jpeg';
+import p4 from '../assets/p4.jpeg';
+import p5 from '../assets/p5.jpeg';
+import p6 from '../assets/p6.jpeg';
+import p7 from '../assets/p7.jpeg';
+import p8 from '../assets/p8.jpeg';
+import n1 from '../assets/n1_v2.jpeg';
+import n2 from '../assets/n2.jpeg';
+import n3 from '../assets/n3.jpeg';
 
 const springValues = {
   damping: 30,
@@ -310,7 +321,7 @@ const Work = () => {
     {
       id: "w1",
       images: [
-        "/src/assets/p1.jpeg"
+        p1,p2,p3
       ],
       title: "NIST UNIVERSITY Website",
       category: "Web Development",
@@ -324,7 +335,7 @@ const Work = () => {
     {
       id: "w2",
       images: [
-        "/src/assets/p4.jpeg"
+        p4,p5,p6,p7,p8
       ],
       title: "Club Website", 
       category: "Web Development",
@@ -338,10 +349,7 @@ const Work = () => {
     {
       id: "w3",
       images: [
-        "/src/assets/",
-        // "/src/assets/n2.jpeg",
-        // "/src/assets/n3.jpeg",
-        // "/src/assets/n4.jpeg"
+       n1,n2,n3
       ],
       title: "Nautical Crew Maritime",
       category: "Web Development",
