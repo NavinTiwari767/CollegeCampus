@@ -24,6 +24,7 @@ export default function TiltedCard({
   displayOverlayContent = false,
 }) {
   const ref = useRef(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -40,7 +41,8 @@ export default function TiltedCard({
   const [lastY, setLastY] = useState(0);
 
   function handleMouse(e) {
-    if (!ref.current) return;
+    // Disable tilt effect on mobile
+    if (isMobile || !ref.current) return;
 
     const rect = ref.current.getBoundingClientRect();
     const offsetX = e.clientX - rect.left - rect.width / 2;
@@ -61,6 +63,10 @@ export default function TiltedCard({
   }
 
   function handleMouseEnter() {
+    if (isMobile) {
+      scale.set(1.05); // Subtle scale on mobile touch
+      return;
+    }
     scale.set(scaleOnHover);
     opacity.set(1);
   }
@@ -98,7 +104,7 @@ export default function TiltedCard({
         <motion.img
           src={imageSrc}
           alt={altText}
-          className="absolute top-0 left-0 object-cover rounded-[15px] will-change-transform [transform:translateZ(0)]"
+          className="absolute top-0 left-0 object-cover rounded-[15px] sm:rounded-[20px] will-change-transform [transform:translateZ(0)] border-2 sm:border-4 border-orange-200/40 shadow-md sm:shadow-lg hover:shadow-orange-200/30 hover:border-orange-300/60 transition-all"
           style={{
             width: imageWidth,
             height: imageHeight,
@@ -114,7 +120,7 @@ export default function TiltedCard({
 
       {showTooltip && (
         <motion.figcaption
-          className="pointer-events-none absolute left-0 top-0 rounded bg-white px-2 py-1 text-xs text-[#2d2d2d] opacity-0 z-[3] hidden sm:block"
+          className="pointer-events-none absolute left-0 top-0 rounded-lg bg-gradient-to-r from-orange-100 to-amber-100 px-3 sm:px-4 py-2 sm:py-2 text-xs sm:text-sm text-amber-900 opacity-0 z-[3] hidden sm:block font-medium shadow-md border border-orange-200/50"
           style={{
             x,
             y,

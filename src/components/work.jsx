@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import p1 from '../assets/p1.jpeg';
 import p2 from '../assets/p2.jpeg';
 import p3 from '../assets/p3.jpeg';
@@ -19,58 +20,40 @@ const springValues = {
 };
 
 function TiltedCard({
-  images = [], // Array of images for scrolling
+  images = [],
   altText = 'Tilted card image',
-  captionText = '',
   containerHeight = '300px',
   containerWidth = '100%',
   scaleOnHover = 1.05,
   rotateAmplitude = 8,
-  showTooltip = false,
-  onClick = () => {},
   isMobile = false,
   title = '',
   description = '',
-  category = ''
+  category = '',
+  onClick = () => {}
 }) {
   const ref = useRef(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
   const rotateX = useSpring(useMotionValue(0), springValues);
   const rotateY = useSpring(useMotionValue(0), springValues);
   const scale = useSpring(1, springValues);
-  const opacity = useSpring(0);
 
-  const [isTouching, setIsTouching] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Check if images are available before attempting to load
   const validImages = images.filter(img => img && img.trim() !== '');
 
-  // Auto-scroll for cards with multiple valid images
   useEffect(() => {
     if (validImages.length <= 1) return;
 
     const interval = setInterval(() => {
-      if (!isHovered) { // Only auto-scroll when not hovered
+      if (!isHovered) {
         setCurrentImageIndex((prev) => (prev + 1) % validImages.length);
       }
     }, 3000);
 
     return () => clearInterval(interval);
   }, [validImages.length, isHovered]);
-
-  // Handle image load errors
-  const handleImageLoad = () => {
-    setIsLoading(false);
-  };
-
-  const handleImageError = () => {
-    setIsLoading(false);
-    console.error(`Failed to load image at index ${currentImageIndex}`);
-  };
 
   function handleMouse(e) {
     if (!ref.current || isMobile) return;
@@ -84,47 +67,16 @@ function TiltedCard({
 
     rotateX.set(rotationX);
     rotateY.set(rotationY);
-
-    x.set(e.clientX - rect.left);
-    y.set(e.clientY - rect.top);
-  }
-
-  function handleTouch(e) {
-    if (!ref.current || !isMobile) return;
-    
-    e.preventDefault();
-    const touch = e.touches[0];
-    const rect = ref.current.getBoundingClientRect();
-    const offsetX = touch.clientX - rect.left - rect.width / 2;
-    const offsetY = touch.clientY - rect.top - rect.height / 2;
-
-    const rotationX = (offsetY / (rect.height / 2)) * -rotateAmplitude;
-    const rotationY = (offsetX / (rect.width / 2)) * rotateAmplitude;
-
-    rotateX.set(rotationX);
-    rotateY.set(rotationY);
-    
-    setIsTouching(true);
-  }
-
-  function handleTouchEnd() {
-    if (!isMobile) return;
-    
-    rotateX.set(0);
-    rotateY.set(0);
-    setIsTouching(false);
   }
 
   function handleMouseEnter() {
     if (isMobile) return;
     scale.set(scaleOnHover);
-    opacity.set(1);
     setIsHovered(true);
   }
 
   function handleMouseLeave() {
     if (isMobile) return;
-    opacity.set(0);
     scale.set(1);
     rotateX.set(0);
     rotateY.set(0);
@@ -146,17 +98,16 @@ function TiltedCard({
     setCurrentImageIndex(index);
   };
 
-  // If no valid images, show fallback
   if (validImages.length === 0) {
     return (
       <div 
-        className="relative w-full h-full rounded-2xl overflow-hidden bg-gradient-to-br from-purple-900/20 to-pink-900/20 border border-purple-500/20 flex items-center justify-center"
+        className="relative w-full h-full rounded-2xl overflow-hidden bg-gradient-to-br from-yellow-500/10 to-black border border-yellow-500/30 flex items-center justify-center"
         style={{ height: containerHeight }}
       >
         <div className="text-center p-6">
           <div className="text-4xl mb-4">📷</div>
-          <p className="text-white font-medium">No Image Available</p>
-          <p className="text-gray-400 text-sm mt-2">{title}</p>
+          <p className="text-yellow-300 font-medium">No Image Available</p>
+          <p className="text-yellow-100/60 text-sm mt-2">{title}</p>
         </div>
       </div>
     );
@@ -165,7 +116,7 @@ function TiltedCard({
   return (
     <motion.div
       ref={ref}
-      className="relative w-full h-full [perspective:800px] flex flex-col items-center justify-center cursor-pointer"
+      className="relative w-full h-full [perspective:800px] flex flex-col items-center justify-center cursor-pointer group"
       style={{
         height: containerHeight,
         width: containerWidth
@@ -173,16 +124,13 @@ function TiltedCard({
       onMouseMove={handleMouse}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      onTouchMove={handleTouch}
-      onTouchStart={handleTouch}
-      onTouchEnd={handleTouchEnd}
       onClick={onClick}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
       <motion.div
-        className="relative [transform-style:preserve-3d] w-full h-full rounded-2xl overflow-hidden bg-gray-900"
+        className="relative [transform-style:preserve-3d] w-full h-full rounded-2xl overflow-hidden bg-gray-900 border border-yellow-500/20 group-hover:border-yellow-400/60 transition-colors"
         style={{
           rotateX,
           rotateY,
@@ -201,41 +149,37 @@ function TiltedCard({
               animate={{ opacity: isLoading ? 0 : 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              onLoad={handleImageLoad}
-              onError={handleImageError}
+              onLoad={() => setIsLoading(false)}
+              onError={() => setIsLoading(false)}
             />
           </AnimatePresence>
 
           {/* Loading State */}
           {isLoading && (
             <div className="absolute inset-0 flex items-center justify-center bg-gray-900">
-              <div className="w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+              <div className="w-8 h-8 border-2 border-yellow-500 border-t-transparent rounded-full animate-spin"></div>
             </div>
           )}
 
-          {/* Navigation Arrows - Show only if multiple images */}
+          {/* Navigation Arrows */}
           {validImages.length > 1 && (
             <>
               <button
                 onClick={prevImage}
-                className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all z-10 backdrop-blur-sm"
+                className="absolute left-2 top-1/2 -translate-y-1/2 bg-yellow-500/20 hover:bg-yellow-500/40 text-white p-2 rounded-full transition-all z-10 backdrop-blur-sm border border-yellow-500/30"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
+                <ChevronLeft size={20} />
               </button>
               <button
                 onClick={nextImage}
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all z-10 backdrop-blur-sm"
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-yellow-500/20 hover:bg-yellow-500/40 text-white p-2 rounded-full transition-all z-10 backdrop-blur-sm border border-yellow-500/30"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
+                <ChevronRight size={20} />
               </button>
             </>
           )}
 
-          {/* Dots Indicator - Show only if multiple images */}
+          {/* Dots Indicator */}
           {validImages.length > 1 && (
             <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1 z-10">
               {validImages.map((_, index) => (
@@ -244,7 +188,7 @@ function TiltedCard({
                   onClick={(e) => goToImage(index, e)}
                   className={`w-2 h-2 rounded-full transition-all ${
                     currentImageIndex === index
-                      ? 'bg-white w-4'
+                      ? 'bg-yellow-400 w-4'
                       : 'bg-white/50 hover:bg-white/70'
                   }`}
                 />
@@ -254,46 +198,33 @@ function TiltedCard({
 
           {/* Image Counter */}
           {validImages.length > 1 && (
-            <div className="absolute top-3 right-3 bg-black/50 text-white px-2 py-1 rounded-full text-xs z-10 backdrop-blur-sm">
+            <div className="absolute top-3 right-3 bg-black/70 text-yellow-300 px-2 py-1 rounded-full text-xs z-10 backdrop-blur-sm border border-yellow-500/30">
               {currentImageIndex + 1} / {validImages.length}
             </div>
           )}
         </div>
 
         {/* Overlay Content */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300">
-          <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 text-white">
             {category && (
-              <span className="inline-block bg-purple-600 text-white px-3 py-1 rounded-full text-sm mb-2">
+              <span className="inline-block bg-yellow-500/80 text-black px-3 py-1 rounded-full text-xs sm:text-sm mb-2 font-semibold">
                 {category}
               </span>
             )}
-            <h3 className="text-xl font-bold mb-2">{title}</h3>
-            <p className="text-gray-300 text-sm mb-3">{description}</p>
+            <h3 className="text-lg sm:text-xl font-bold mb-1 sm:mb-2 text-yellow-300">{title}</h3>
+            <p className="text-yellow-100/70 text-xs sm:text-sm mb-2 sm:mb-3 line-clamp-2">{description}</p>
             {validImages.length > 1 && (
-              <p className="text-xs text-gray-400 mb-2">
-                📷 {validImages.length} images • Auto-scrolling enabled
+              <p className="text-xs text-yellow-600 mb-2">
+                📷 {validImages.length} images
               </p>
             )}
-            <button className="bg-white text-black px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
+            <button className="bg-yellow-400 text-black px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-yellow-300 transition-colors">
               View Details
             </button>
           </div>
         </div>
       </motion.div>
-
-      {showTooltip && !isMobile && (
-        <motion.figcaption
-          className="pointer-events-none absolute left-0 top-0 rounded-[4px] bg-white px-[10px] py-[4px] text-[10px] text-[#2d2d2d] opacity-0 z-[3]"
-          style={{
-            x,
-            y,
-            opacity
-          }}
-        >
-          {captionText}
-        </motion.figcaption>
-      )}
     </motion.div>
   );
 }
@@ -316,13 +247,10 @@ const Work = () => {
     };
   }, []);
 
-  // Projects data - FIXED: Removed empty image strings from 3rd card
   const works = [
     {
       id: "w1",
-      images: [
-        p1,p2,p3
-      ],
+      images: [p1, p2, p3],
       title: "NIST UNIVERSITY Website",
       category: "Web Development",
       type: "Website",
@@ -334,9 +262,7 @@ const Work = () => {
     },
     {
       id: "w2",
-      images: [
-        p4,p5,p6,p7,p8
-      ],
+      images: [p4, p5, p6, p7, p8],
       title: "Club Website", 
       category: "Web Development",
       type: "Website",
@@ -348,9 +274,7 @@ const Work = () => {
     },
     {
       id: "w3",
-      images: [
-       n1,n2,n3
-      ],
+      images: [n1, n2, n3],
       title: "Nautical Crew Maritime",
       category: "Web Development",
       type: "Website",
@@ -362,106 +286,112 @@ const Work = () => {
     }
   ];
 
-  // Get unique categories for filtering
   const categories = ['All', ...new Set(works.map(work => work.category))];
   const [activeCategory, setActiveCategory] = useState('All');
 
-  // Filter works based on selected category
   const filteredWorks = activeCategory === 'All' 
     ? works 
     : works.filter(work => work.category === activeCategory);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white flex flex-col items-center px-4 py-16">
-      {/* Heading */}
-      <h2 className="text-3xl md:text-5xl font-bold text-center mb-4 md:mb-6">
-        <span className="bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
-          My Work
-        </span>
-      </h2>
-
-      <p className="text-gray-400 text-center max-w-2xl mb-8 md:mb-12 px-4">
-        Here are some of my recent projects. Click on each card to view more details.
-      </p>
-
-      {/* Category Filter */}
-      <div className="flex flex-wrap gap-2 mb-8 justify-center">
-        {categories.map(category => (
-          <button
-            key={category}
-            onClick={() => setActiveCategory(category)}
-            className={`px-4 py-2 rounded-full text-sm transition-colors ${
-              activeCategory === category 
-                ? 'bg-purple-600 text-white' 
-                : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-            }`}
-          >
-            {category}
-          </button>
-        ))}
+    <div className="min-h-screen bg-black text-white flex flex-col items-center px-4 py-8 md:py-16 relative overflow-hidden">
+      {/* Background gradients */}
+      <div className="absolute inset-0 opacity-10 pointer-events-none">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-yellow-500 rounded-full mix-blend-screen blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-72 h-72 bg-amber-500 rounded-full mix-blend-screen blur-3xl"></div>
       </div>
 
-      {/* Projects Grid */}
-      <div className="w-full max-w-7xl">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredWorks.map((work, index) => (
-            <TiltedCard
-              key={work.id}
-              images={work.images}
-              altText={work.title}
-              title={work.title}
-              description={work.description}
-              category={work.category}
-              containerHeight="350px"
-              scaleOnHover={1.02}
-              rotateAmplitude={5}
-              isMobile={isMobile}
-              onClick={() => {
-                setActiveWork(work);
-                setIsOpen(true);
-              }}
-            />
+      <div className="relative z-10 w-full">
+        {/* Heading */}
+        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-center mb-3 sm:mb-4 md:mb-6">
+          <span className="bg-gradient-to-r from-yellow-300 via-yellow-400 to-amber-400 bg-clip-text text-transparent">
+            Our Work
+          </span>
+        </h2>
+
+        <p className="text-yellow-100/60 text-center max-w-2xl mx-auto mb-6 sm:mb-8 md:mb-12 px-2 text-sm sm:text-base">
+          Here are some of our recent projects. Click on each card to view more details.
+        </p>
+
+        {/* Category Filter */}
+        <div className="flex flex-wrap gap-2 mb-6 sm:mb-8 justify-center px-2">
+          {categories.map(category => (
+            <button
+              key={category}
+              onClick={() => setActiveCategory(category)}
+              className={`px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm transition-all font-semibold ${
+                activeCategory === category 
+                  ? 'bg-yellow-400 text-black border border-yellow-300' 
+                  : 'bg-yellow-500/10 text-yellow-300 hover:bg-yellow-500/20 border border-yellow-500/30'
+              }`}
+            >
+              {category}
+            </button>
           ))}
+        </div>
+
+        {/* Projects Grid */}
+        <div className="w-full max-w-7xl mx-auto px-2 sm:px-0">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+            {filteredWorks.map((work) => (
+              <TiltedCard
+                key={work.id}
+                images={work.images}
+                altText={work.title}
+                title={work.title}
+                description={work.description}
+                category={work.category}
+                containerHeight="300px"
+                scaleOnHover={1.02}
+                rotateAmplitude={5}
+                isMobile={isMobile}
+                onClick={() => {
+                  setActiveWork(work);
+                  setIsOpen(true);
+                }}
+              />
+            ))}
+          </div>
         </div>
       </div>
 
       {/* Modal */}
       {isOpen && activeWork && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/90 z-50 px-4 py-6 md:py-12 overflow-y-auto">
-          <div className="bg-gray-900 rounded-2xl shadow-2xl p-4 md:p-6 w-full max-w-4xl relative mt-auto mb-auto">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/95 backdrop-blur-sm z-50 px-4 py-6 md:py-12 overflow-y-auto">
+          <div className="bg-gradient-to-br from-slate-900 via-black to-slate-900 border border-yellow-500/30 rounded-3xl shadow-2xl p-6 md:p-8 w-full max-w-4xl relative mt-auto mb-auto">
             {/* Close Button */}
             <button
               onClick={() => setIsOpen(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl md:text-3xl z-10 bg-gray-800 rounded-full p-1"
+              className="absolute top-4 right-4 text-yellow-400 hover:text-yellow-300 z-10 bg-yellow-500/10 hover:bg-yellow-500/20 rounded-full p-2 transition-colors"
             >
-              ✕
+              <X size={24} />
             </button>
 
             {/* Content */}
-            <div className="flex flex-wrap gap-2 mb-3">
-              <span className="bg-purple-600 text-white px-3 py-1 rounded-full text-sm">
+            <div className="flex flex-wrap gap-2 mb-4">
+              <span className="bg-yellow-500 text-black px-3 py-1 rounded-full text-xs sm:text-sm font-semibold">
                 {activeWork.category}
               </span>
-              <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm">
+              <span className="bg-yellow-600 text-white px-3 py-1 rounded-full text-xs sm:text-sm font-semibold">
                 {activeWork.type}
               </span>
-              <span className="bg-green-600 text-white px-3 py-1 rounded-full text-sm">
+              <span className="bg-yellow-700 text-white px-3 py-1 rounded-full text-xs sm:text-sm font-semibold">
                 {activeWork.year}
               </span>
             </div>
 
-            <h2 className="text-2xl md:text-3xl font-bold mb-3 text-white">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 text-yellow-300">
               {activeWork.title}
             </h2>
-            <p className="text-gray-300 text-base md:text-lg leading-relaxed mb-4">
+            <p className="text-yellow-100/70 text-base sm:text-lg leading-relaxed mb-6">
               {activeWork.fullDescription}
             </p>
             
-            <div className="flex flex-wrap gap-2 mt-6">
+            <div className="flex flex-wrap gap-2 mt-6 mb-6">
               {activeWork.technologies.map((tech, index) => (
                 <span 
                   key={index}
-                  className="bg-purple-900 text-purple-200 px-3 py-1 rounded-full text-sm"
+                  className="bg-yellow-500/20 text-yellow-300 px-3 py-1 rounded-full text-xs sm:text-sm border border-yellow-500/40"
                 >
                   {tech}
                 </span>
@@ -470,7 +400,7 @@ const Work = () => {
             
             <button 
               onClick={() => window.open(activeWork.link, '_blank')}
-              className="mt-6 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 transition-colors"
+              className="w-full sm:w-auto bg-gradient-to-r from-yellow-400 to-amber-500 text-black px-6 sm:px-8 py-3 rounded-xl font-semibold hover:from-yellow-300 hover:to-amber-400 transition-all hover:shadow-[0_0_30px_rgba(250,204,21,0.4)]"
             >
               View Live Project
             </button>
