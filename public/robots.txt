@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://collegecampus.site/sitemap.xml
