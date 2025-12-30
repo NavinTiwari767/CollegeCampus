@@ -186,9 +186,9 @@ export default function ClientForm() {
               }}
               className="w-full px-4 py-3 rounded-lg bg-yellow-500/5 border border-yellow-500/30 focus:border-yellow-400/60 focus:bg-yellow-500/10 outline-none text-white text-sm sm:text-base transition"
             >
-              <option value="">Select a service...</option>
+              <option value="" className="bg-black text-white">Select a service...</option>
               {services.map(svc => (
-                <option key={svc} value={svc}>{svc}</option>
+                <option key={svc} value={svc} className="bg-black text-white">{svc}</option>
               ))}
             </select>
           </div>
@@ -219,9 +219,9 @@ export default function ClientForm() {
               onChange={handleChange}
               className="w-full px-4 py-3 rounded-lg bg-yellow-500/5 border border-yellow-500/30 focus:border-yellow-400/60 focus:bg-yellow-500/10 outline-none text-white text-sm sm:text-base transition"
             >
-              <option value="">Select contact method...</option>
+              <option value="" className="bg-black text-white">Select contact method...</option>
               {contactMethods.map(method => (
-                <option key={method} value={method}>{method}</option>
+                <option key={method} value={method} className="bg-black text-white">{method}</option>
               ))}
             </select>
           </div>

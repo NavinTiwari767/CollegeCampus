@@ -7,3 +7,12 @@ html, body, #root {
   margin: 0;
   padding: 0;
 }
+select option {
+  background-color: #000;
+  color: #fff;
+}
+
+select option:checked {
+  background-color: #fbbf24;
+  color: #000;
+}
