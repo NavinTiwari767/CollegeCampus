@@ -2,23 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
-  <loc>https://www.collegecampus.site/</loc>
+  <loc>https://collegecampus.site/</loc>
   <priority>1.0</priority>
 </url>
 
 <url>
-  <loc>https://www.collegecampus.site/about</loc>
+  <loc>https://collegecampus.site/about</loc>
   <priority>0.8</priority>
 </url>
 
 <url>
-  <loc>https://www.collegecampus.site/services</loc>
+  <loc>https://collegecampus.site/services</loc>
   <priority>0.8</priority>
 </url>
 
 <url>
-  <loc>https://www.collegecampus.site/contact</loc>
+  <loc>https://collegecampus.site/contact</loc>
   <priority>0.8</priority>
 </url>
 
 </urlset>
+    
